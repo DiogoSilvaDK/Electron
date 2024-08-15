@@ -19,11 +19,19 @@ const createWindow = () => {
 
 // janela sobre
 const aboutWindow = () => {
-    const about = new BrowserWindow
+    const about = new BrowserWindow({
+        width:360,
+        height:220,
+        icon: './src/public/img/abobora.png',
+        autoHideMenuBar:true,
+        resizable:false
+    })
+
+    about.loadFile('./src/views/sobre.html')
 }
 app.whenReady().then(() => {
     createWindow()
-
+    // aboutWindow()
     app.on("activate", () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
     })
