@@ -2,6 +2,8 @@
 const { app, BrowserWindow, nativeTheme } = require("electron")
 const { close } = require("original-fs")
 
+
+// Janela principal 
 const createWindow = () => {
     nativeTheme.themeSource = "dark"
     const win = new BrowserWindow({
@@ -13,6 +15,11 @@ const createWindow = () => {
         // titleBarStyle: 'hidden'
     })
     win.loadFile('./src/views/index.html')
+}
+
+// janela sobre
+const aboutWindow = () => {
+    const about = new BrowserWindow
 }
 app.whenReady().then(() => {
     createWindow()
