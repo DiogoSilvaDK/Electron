@@ -1,4 +1,4 @@
-// console.log("Processo principal")
+console.log("Processo principal")
 const { app, BrowserWindow, nativeTheme, Menu, shell } = require("electron")
 const { close } = require("original-fs")
 
@@ -40,9 +40,10 @@ const childWindow = () => {
             width: 640,
             height: 480,
             icon: './src/public/img/abobora.png',
-            autoHideMenuBar: true,
-            resizable: false,
-            parent:father
+            // autoHideMenuBar: true,
+            // resizable: false,
+            // parent:father,
+            // modal:true
         })
         child.loadFile('./src/views/child.html')
     }
@@ -116,6 +117,16 @@ const templete = [
         {
             label: 'Sobre',
             click: () => aboutWindow()
+        }
+        ]
+    },
+    {
+        label:'Ferramentas',
+        submenu:[{
+            label:'Registro'
+        },
+        {
+            label:'SMS'
         }
         ]
     }
