@@ -1,5 +1,5 @@
 // console.log("Processo principal")
-const { app, BrowserWindow, nativeTheme, Menu } = require("electron")
+const { app, BrowserWindow, nativeTheme, Menu, shell } = require("electron")
 const { close } = require("original-fs")
 
 
@@ -29,8 +29,23 @@ const aboutWindow = () => {
         autoHideMenuBar: true,
         resizable: false
     })
-
     about.loadFile('./src/views/sobre.html')
+}
+
+// Janela Secundária
+const childWindow = () => {
+    const father = BrowserWindow.getFocusedWindow()
+    if (father) {
+        const child = new BrowserWindow({
+            width: 640,
+            height: 480,
+            icon: './src/public/img/abobora.png',
+            autoHideMenuBar: true,
+            resizable: false,
+            parent:father
+        })
+        child.loadFile('./src/views/child.html')
+    }
 }
 app.whenReady().then(() => {
     createWindow()
@@ -51,6 +66,10 @@ const templete = [
         label: 'Arquivo',
         submenu: [
             {
+                label: 'Janela Secundária',
+                click: () => childWindow()
+            },
+            {
                 label: 'Sair',
                 click: () => app.quit(),
                 accelerator: 'Alt+F4'
@@ -67,10 +86,37 @@ const templete = [
             {
                 label: 'Ferramentas do desenvolvedor',
                 role: 'toggleDevTools'
+            },
+            {
+                type: 'separator'
+            },
+            {
+                label: 'Aplizar Zoom',
+                role: 'zoomIn'
+            },
+            {
+                label: 'Reduzir',
+                role: 'zoomOut'
+            },
+            {
+                label: 'Restaurar o zoom padrão',
+                role: 'resetZoom'
             }
         ]
     },
     {
-        label: 'Ajuda'
+        label: 'Ajuda',
+        submenu: [{
+            label: 'doc',
+            click: () => shell.openExternal('https://github.com/DiogoSilvaDK/Electron.git')
+        },
+        {
+            type: 'separator'
+        },
+        {
+            label: 'Sobre',
+            click: () => aboutWindow()
+        }
+        ]
     }
 ]
