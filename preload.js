@@ -24,4 +24,5 @@ function obterData() {
         day: 'numeric'
     }
     return data.toLocaleDateString('pt-BR', options)
+    
 }
