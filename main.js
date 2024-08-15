@@ -1,6 +1,6 @@
 console.log("Processo principal")
 console.log(`Electron: ${process.versions.electron}`)
-const { app, BrowserWindow, nativeTheme, Menu, shell } = require("electron")
+const { app, BrowserWindow, nativeTheme, Menu, shell, ipcMain } = require("electron")
 const path = require('node:path')
 const { close } = require("original-fs")
 
@@ -12,8 +12,8 @@ const createWindow = () => {
         width: 800,
         height: 600,
         icon: './src/public/img/abobora.png',
-        webPreferences:{
-            preload:path.join(__dirname,'preload.js')
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js')
         }
         // resizable: false
         // autoHideMenuBar: true
@@ -44,7 +44,7 @@ const childWindow = () => {
             width: 640,
             height: 480,
             icon: './src/public/img/abobora.png',
-            // autoHideMenuBar: true,
+            autoHideMenuBar: true,
             // resizable: false,
             // parent:father,
             // modal:true
@@ -55,6 +55,16 @@ const childWindow = () => {
 app.whenReady().then(() => {
     createWindow()
     // aboutWindow()
+
+    // IPC >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    ipcMain.on('open-child', () => {
+        childWindow()
+    })
+    ipcMain.on('renderer-message',(event,message)=>{
+        console.log(`processo principal recebeu uma mensagem: ${message}`)
+        event.reply('main-message', 'Ola!  rederizador')
+    })
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     app.on("activate", () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
     })
@@ -125,12 +135,12 @@ const templete = [
         ]
     },
     {
-        label:'Ferramentas',
-        submenu:[{
-            label:'Registro'
+        label: 'Ferramentas',
+        submenu: [{
+            label: 'Registro'
         },
         {
-            label:'SMS'
+            label: 'SMS'
         }
         ]
     }
