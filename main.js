@@ -1,6 +1,7 @@
 console.log("Processo principal")
 console.log(`Electron: ${process.versions.electron}`)
-const { app, BrowserWindow, nativeTheme, Menu, shell, ipcMain } = require("electron")
+const { app, BrowserWindow, nativeTheme, Menu, shell, ipcMain, dialog, } = require("electron")
+const { error } = require("node:console")
 const path = require('node:path')
 const { close } = require("original-fs")
 
@@ -60,9 +61,45 @@ app.whenReady().then(() => {
     ipcMain.on('open-child', () => {
         childWindow()
     })
-    ipcMain.on('renderer-message',(event,message)=>{
+    ipcMain.on('renderer-message', (event, message) => {
         console.log(`processo principal recebeu uma mensagem: ${message}`)
         event.reply('main-message', 'Ola!  rederizador')
+    })
+
+    ipcMain.on('dialog-info', () => {
+        dialog.showMessageBox({
+            type: 'info',
+            title: 'Informação',
+            message: 'Mensagem',
+            buttons: [
+                'OK'
+            ]
+        })
+    })
+    ipcMain.on('dialog-warning', () => {
+        dialog.showMessageBox({
+            type: 'warning',
+            title: 'Aviso',
+            message: 'Confirma Ação',
+            buttons: [
+                'Sim', 'Não'
+            ],
+            defaultId: 0
+        }).then((result) => {
+            console.log(result)
+            if (result.response === 0) {
+                console.log('comfirmado')
+            }
+        })
+    })
+    ipcMain.on('dialog-select', () => {
+        dialog.showOpenDialog({
+            properties: ['openDirectory']
+        }).then((result) => { 
+            console.log(result)
+        }).catch(error => {
+            console.log(error)
+        })
     })
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     app.on("activate", () => {
@@ -145,3 +182,5 @@ const templete = [
         ]
     }
 ]
+
+

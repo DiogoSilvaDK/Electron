@@ -6,7 +6,10 @@ contextBridge.exposeInMainWorld('api', {
     verElectron: () => process.versions.electron,
     open: () => ipcRenderer.send('open-child'),
     send: (massage) => ipcRenderer.send('renderer-message', massage),
-    on: (massage) => ipcRenderer.on('main-message',massage)
+    on: (massage) => ipcRenderer.on('main-message',massage),
+    info: () => ipcRenderer.send('dialog-info'),
+    warning: () => ipcRenderer.send('dialog-warning'),
+    select: () => ipcRenderer.send('dialog-select'),
 })
 
 // Manipulação do DOM

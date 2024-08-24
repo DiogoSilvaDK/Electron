@@ -16,3 +16,13 @@ api.send('OI!!')
 api.on((event,mensagem)=>{
     console.log(`Processo de redenização recebeu uma mensagem: ${mensagem}`)
 })
+
+function info(){
+    api.info()
+}
+function warning(){
+    api.warning()
+}
+function select(){
+    api.select()
+}
